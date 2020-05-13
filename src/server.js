@@ -9,8 +9,22 @@ import apiRouter from './router';
 // initialize
 const app = express();
 
+
+const allowCrossDomain = function (req, res, next) {
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
+  res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, Content-Length, X-Requested-With');
+
+  // intercept OPTIONS method
+  if (req.method === 'OPTIONS') {
+    res.send(200);
+  } else {
+    next();
+  }
+};
 // enable/disable cross origin resource sharing if necessary
 app.use(cors());
+app.use(allowCrossDomain);
 
 // enable/disable http request logging
 app.use(morgan('dev'));
@@ -36,6 +50,7 @@ app.use('/api', apiRouter);
 // additional init stuff should go before hitting the routing
 // DB Setup
 const mongoURI = process.env.MONGODB_URI || 'mongodb://localhost/blog';
+// const mongoURI = process.env.MONGODB_URI || 'mongodb://julianxywu:cs52lab5@ds127564.mlab.com:27564/heroku_z8cdtp23';
 mongoose.connect(mongoURI, { useFindAndModify: false, useNewUrlParser: true, useUnifiedTopology: true });
 // set mongoose promises to es6 default
 mongoose.Promise = global.Promise;
