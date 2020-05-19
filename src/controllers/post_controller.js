@@ -6,6 +6,8 @@ export const createPost = (req, res) => {
   post.tags = req.body.tags;
   post.content = req.body.content;
   post.coverUrl = req.body.coverUrl;
+  post.author = req.body.author;
+  post.username = req.user.username;
   post.save()
     .then((result) => {
       res.json({ message: 'Post created!' });
@@ -13,7 +15,7 @@ export const createPost = (req, res) => {
     .catch((error) => {
       res.status(500).json({ error });
     });
-//   res.send('post should be created and returned');
+//  res.send('post should be created and returned');
 };
 export const getPosts = (req, res) => {
 //   res.send(Post.find({}));
